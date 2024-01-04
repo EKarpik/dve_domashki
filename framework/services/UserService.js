@@ -1,54 +1,45 @@
-import axios from 'axios'
-import config from '../config/config'
+import supertest from "supertest";
+import config from "../config/config";
+import generateUser from "../fixtures/userFixture";
 
-const client = axios.create({
-  baseURL: config.baseUrl,
-  validateStatus: () => true
-})
+const { url } = config;
 
-const getUser = async ({ userId, token }) => {
-  const response = await client.get(`/Account/v1/User/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  }
-}
+//созадние аккаунта юзера
+const createUser = ({userName, password}) => {
+  console.log(`${url}/Account/v1/User`)
+  console.log('этот лоигн передан в функци createUser', userName)
+  console.log('этот пароль передан в функци createUser', password)
+  return supertest(url)
+    .post(`/Account/v1/User`)
+    .set("Accept", "application/json")
+    .send({ userName, password });
+};
 
-const createUser = async ({ userName, password }) => {
-  const response = await client.post(`/Account/v1/User`, {
-    userName,
-    password
-  })
+//получение информации о юзере 
+const userInfo = async ({ userId, token }) => {
+  console.log('uuid, который был передан userInfo' ,userId)
+  console.log('token, внутри userInfo' ,token)
+  return supertest(url)
+    .get(`/Account/v1/User/${userId}`)
+    .set("Accept", "application/json")
+    .set("Authorisation", `${token}`)
+};
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  }
-}
+//удаление юзера
+const delUser = async ({ userId, token }) => {
+  console.log('uuid, который был передан delUser' ,userId)
+  console.log('token, внутри delUser' ,token)
+  return supertest(url)
+    .delete(`/Account/v1/User/${userId}`)
+    .set("Accept", "application/json")
+    .set("Authorisation", `${token}`);
+};
 
-const removeUser = async ({ userId, token }) => {
-  const response = await client.delete(`/Account/v1/User/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  }
-}
 
 export default {
-  get: getUser,
-  create: createUser,
-  remove: removeUser
-}
+  delUser,
+  userInfo,
+  createUser,
+};
+
