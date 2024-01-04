@@ -4,7 +4,7 @@ const config = {
   credentials: {
     username: "kartoshka",
     password: "Test123@",
-    userID: "f4fae48c-4c01-4a0b-b4a9-2c74ef3c398a",
+    userId: "f4fae48c-4c01-4a0b-b4a9-2c74ef3c398a",
   },
 };
 
