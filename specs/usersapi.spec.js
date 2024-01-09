@@ -38,7 +38,7 @@
 //         const Info = await UserService.userInfo({userId, token});
 //         console.log('userId используемое в тесте info о юзере ', userId);
 //         console.log('token используемый в тесте info о юзере ', token);
-//         console.log(Info);
+//         //console.log(Info);
 //         expect(Info.status).toBe(201);
 //         return Info.body;
 //       });

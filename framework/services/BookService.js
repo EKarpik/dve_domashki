@@ -10,6 +10,20 @@ const getBooks = async () => {
   }
 }
 
+const getBook = async ({ isbn, token }) => {
+  const response = await supertest(config.url)
+    .get(`/BookStore/v1/Book?ISBN=${isbn}`)
+    .set('Authorization', `${token}`)
+    .send({
+       isbn
+    })
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.body
+  }
+}
+
 const addBook = async ({ userId, isbn, token }) => {
   const response = await supertest(config.url)
     .put(`/BookStore/v1/Books/${userId}`)
@@ -44,6 +58,7 @@ const addListOfBooks = async ({ userId, isbns, token }) => {
 }
 
 export default {
+  getOne: getBook,
   getAll: getBooks,
   add: addBook,
   addList: addListOfBooks

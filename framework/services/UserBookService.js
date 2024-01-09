@@ -45,11 +45,25 @@ const removeAllBooks = async ({ userId, token }) => {
   }
 }
 
+
+const removeOneBook = async ({ userId, isbn, token }) => {
+  const response = await supertest(config.url)
+    .delete("/BookStore/v1/Book")
+    .set('Authorization', `${token}`)
+    .send({
+      userId,
+      isbn
+    })
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.body
+  }
+}
+
 export default {
   replace: replaceBook,
   addList: addListOfBooks,
-  remove: () => {
-    throw new Error('not implemented')
-  },
+  removeOne: removeOneBook,
   removeAll: removeAllBooks
 }
