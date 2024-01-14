@@ -2,3 +2,6 @@ node_modules
 coverage
 .idea
 .eslintcache
+
+allure-report
+allure-results

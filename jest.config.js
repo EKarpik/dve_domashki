@@ -4,12 +4,15 @@
  */
 
 /** @type {import('jest').Config} */
+
+
 const config = {
 reporters: [‘default’, ‘jest-allure’],
 testRunner: ‘jest-jasmine2’,
 setupFilesAfterEnv: [
 ‘jest-allure/dist/setup’,
 ],
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
