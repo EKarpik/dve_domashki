@@ -2,9 +2,9 @@ import supertest from 'supertest'
 import config from '../config/config.js'
 
 const replaceBook = async ({ userId, fromIsbn, toIsbn, token }) => {
-  const response = await supertest(config.baseUrl)
+  const response = await supertest(config.url)
     .put(`/BookStore/v1/Books/${fromIsbn}`)
-    .set('Authorization', `Bearer ${token}`)
+    .set('Authorization', `${token}`)
     .send({
       userId,
       isbn: toIsbn
@@ -22,9 +22,9 @@ const addListOfBooks = async ({ userId, isbns, token }) => {
     collectionOfIsbns: isbns.map(isbn => ({ isbn }))
   }
 
-  const response = await supertest(config.baseUrl)
+  const response = await supertest(config.url)
     .post(`/BookStore/v1/Books`)
-    .set('Authorization', `Bearer ${token}`)
+    .set('Authorization', `${token}`)
     .set('Accept', 'application/json')
     .send(payload)
   return {
@@ -35,9 +35,25 @@ const addListOfBooks = async ({ userId, isbns, token }) => {
 }
 
 const removeAllBooks = async ({ userId, token }) => {
-  const response = await supertest(config.baseUrl)
+  const response = await supertest(config.url)
     .delete(`/BookStore/v1/Books?UserId=${userId}`)
-    .set('Authorization', `Bearer ${token}`)
+    .set('Authorization', `${token}`)
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.body
+  }
+}
+
+
+const removeOneBook = async ({ userId, isbn, token }) => {
+  const response = await supertest(config.url)
+    .delete("/BookStore/v1/Book")
+    .set('Authorization', `${token}`)
+    .send({
+      userId,
+      isbn
+    })
   return {
     headers: response.headers,
     status: response.status,
@@ -48,8 +64,6 @@ const removeAllBooks = async ({ userId, token }) => {
 export default {
   replace: replaceBook,
   addList: addListOfBooks,
-  remove: () => {
-    throw new Error('not implemented')
-  },
+  removeOne: removeOneBook,
   removeAll: removeAllBooks
 }
